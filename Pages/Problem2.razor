@@ -1,0 +1,87 @@
+﻿@page "/Problem2"
+
+<h3>EditFormWithValidations</h3>
+
+<h1>Instructions:</h1>
+<p>You have two forms one with Validations component and one without</p>
+<p>Objective: When changing the form content the button should be enabled.</p>
+
+<EditForm Model="@Form1Model" Context="EditContextForm1">
+    <h2>Form 1 - Chang the name or the time fields and notice that the 'Save all changes' button is enabled.</h2>
+   
+        <Validation>
+            <TextEdit id="inputName" class="form-control boxed" @bind-Text="@Form1Model.Name">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TextEdit>
+        </Validation>
+        <Validation>
+            <TimePicker TValue="TimeSpan?" @bind-Time="Form1Model.Time">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TimePicker>
+        </Validation>
+    
+    <Button Color="Color.Primary" Type="ButtonType.Button" Disabled="@(!EditContextForm1.IsModified())">Save All Changes</Button>
+</EditForm>
+
+
+<EditForm Model="@Form2Model" Context="EditContextForm2">
+    <h2>Form 2 - Adding the Blazorise Validation component to the form prevents the 'Save all changes' button from becoming enabled.</h2>
+     <Validations Mode="ValidationMode.Auto" Model="@Form1Model" ValidateOnLoad="false">
+        <Validation>
+        <TextEdit id="inputName" class="form-control boxed" @bind-Text="@Form2Model.Name">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TextEdit>
+        </Validation>
+        <Validation>
+        <TimePicker TValue="TimeSpan?" @bind-Time="Form2Model.Time">
+                <Feedback>
+                    <ValidationError />
+                </Feedback>
+            </TimePicker>
+        </Validation>
+    </Validations>
+    <Button Color="Color.Primary" Type="ButtonType.Button" Disabled="@(!EditContextForm2.IsModified())">Save All Changes</Button>
+</EditForm>
+
+<h2>The problem is: I need to use the Validations component because I want to make use of the ValidateOnLoad="false" </h2>
+
+@code {
+
+    public EditContext EditContextForm1 { get; set; }
+    public EditContext EditContextForm2 { get; set; }
+
+
+    public DataModel Form1Model { get; set; }
+    public DataModel Form2Model { get; set; }
+
+    protected override void OnParametersSet()
+    {
+
+        Form1Model = new DataModel()
+            {
+                Name = "Joe Bloggs",
+                Time = DateTime.UtcNow.TimeOfDay
+            };
+
+        Form2Model = new DataModel()
+            {
+                Name = "James Dean",
+                Time = DateTime.UtcNow.TimeOfDay
+            };
+
+        base.OnParametersSet();
+    }
+
+    public class DataModel
+    {
+        public string Name { get; set; }
+
+        public TimeSpan? Time { get; set; }
+    }
+}

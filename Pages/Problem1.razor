@@ -1,0 +1,49 @@
+﻿@page "/problem1"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Blazorise Dropdown Incorrect Positioning</h1>
+<p>
+This demostrates the incorrect positioning of the dropdown-menu, When opening the following inline style is applied which is causing the issue style="position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate(50px, 328px);
+</p>
+
+
+
+<Dropdown>
+    <DropdownToggle Color="Color.Secondary">
+        Columns
+    </DropdownToggle>
+    <DropdownMenu>
+
+        @foreach (var item in Columns)
+        {
+            <DropdownItem @onclick:preventDefault>
+                <Check TValue="bool" @bind-Checked="@item.Selected">@item.Heading</Check>
+            </DropdownItem>
+        }
+        <DropdownDivider />
+        <DropdownItem>
+            <Button Color="Color.Primary" Clicked="@OnButtonUpdatePreferencesClicked">Update Preferences</Button>
+        </DropdownItem>
+    </DropdownMenu>
+</Dropdown>
+
+@code{
+
+    item[] Columns = new item[] {
+        new item(){ Heading = "Test1", Selected = false },
+        new item(){ Heading = "Test2", Selected = false }, 
+        new item(){ Heading = "Test3", Selected = false }
+    };
+
+    protected void OnButtonUpdatePreferencesClicked()
+    {
+        
+    }
+
+    public class item
+    {
+        public string Heading { get; set; }
+        public bool Selected { get; set; }
+    }
+}
